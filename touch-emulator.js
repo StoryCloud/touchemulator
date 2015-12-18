@@ -290,12 +290,20 @@
     /**
      * TouchEmulator initializer
      */
-    function TouchEmulator() {
+    function TouchEmulator(options) {
+        options = options === undefined ? {} : options;
+
         if (hasTouchSupport()) {
             return;
         }
 
         fakeTouchSupport();
+
+        // We might only want to fake touch support, e.g. for simulating mobile
+        // devices in tests.
+        if (options.doNotTranslate) {
+            return;
+        }
 
         window.addEventListener("mousedown", onMouse('touchstart'), true);
         window.addEventListener("mousemove", onMouse('touchmove'), true);
